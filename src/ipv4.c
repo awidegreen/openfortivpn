@@ -1239,12 +1239,14 @@ int ipv4_add_nameservers_to_resolv_conf(struct tunnel *tunnel)
 		strcat(ns2, "\n");
 		fputs(ns2, file);
 	}
+
+	if (use_resolvconf == 0)
+		fwrite(buffer, stat.st_size, 1, file);
+
 	if (tunnel->ipv4.dns_suffix_was_there == 0) {
 		strcat(dns_suffix, "\n");
 		fputs(dns_suffix, file);
 	}
-	if (use_resolvconf == 0)
-		fwrite(buffer, stat.st_size, 1, file);
 
 	ret = 0;
 

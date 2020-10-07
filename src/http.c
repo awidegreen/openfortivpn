@@ -836,6 +836,18 @@ static int parse_xml_config(struct tunnel *tunnel, const char *buffer)
 		}
 	}
 
+	// The dns search string (split dns)
+	val = buffer;
+	while ((val = xml_find('<', "split-dns", val, 2))) {
+		if (xml_find(' ', "domains=", val, 1)) {
+			tunnel->ipv4.dns_suffix
+			        = xml_get(xml_find(' ', "domains=", val, 1));
+			log_debug("found split-dns suffix %s in xml config\n",
+			          tunnel->ipv4.dns_suffix);
+			break;
+		}
+	}
+
 	// The dns servers
 	val = buffer;
 	while ((val = xml_find('<', "dns", val, 2))) {
